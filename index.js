@@ -7,6 +7,10 @@
 
  */
 
+ import dbg from 'debug';
+ dbg('aa')("asdf="+Math.random());
+
+var clsOne=function(){
 function latch2(measher){
     if (!(this instanceof latch2)) return new latch2(measher);
   
@@ -27,7 +31,7 @@ latch2.prototype.run=function (t,val){
   var lat2= latch2(100);
 //var lat2=latch2(36);
 
-export function dsp(t) {
+this.main=function (t) {
   var snd,freq=440,vol,env;
   //freq=lat1.run(t, (Math.random()*400+100));
   freq=lat1.run(t, (lat1.cnt%10+2)*50);
@@ -35,16 +39,78 @@ export function dsp(t) {
   vol=0.7;
   env=Math.cos(t* Math.PI * 2*1)*Math.cos(t*Math.PI*2*0.5)*Math.cos(t*Math.PI*0.25);
   env=env*env;
+  env=1;
+  env=Math.sin(t* Math.PI * 10);
+  env=env*env;
   snd=Math.sin(t * Math.PI * 2 *freq)*env*vol;
-  return snd;
+  return [snd,snd];
+}
+}
+clsOne.prototype.run=function(t){
+  return this.main(t);
+}
+var soundOne=new clsOne();
+
+var clsTwo=function(){
+  var m_aa=new FastLP3(400);
+
+var fastlp_a =function(x){return m_aa.run(x)};
+function FastLP3(n){
+  this.n=n;
+  this.val=0;
+  this.zval=0;
+  this.value=0;
+}
+FastLP3.prototype.run=function(x)
+{
+
+  this.val += (x - this.val) / this.n;
+  return this.val;
+//    this.zval=this.value;
+//  this.value=x;
+//  return (x+this.zval)/2;
 }
 
-/**
- * ### Exercise:
- * 
- * Complete the function to accept a frequency in Hz and return a sample:
- */
+function sin(x, t){
+  return Math.sin(2 * Math.PI * t * x);
+}
 
-function sin(){
-  //
+function saw(x, t){
+  return 1-2 * (t % (1/x)) * x;
+}
+function note(n, octave){
+  return Math.pow(
+    2,
+    (n + 0 - 33 + (12 * (octave || 0))) / 12
+  ) * 440; // A4 tune
+}
+function perc(wave, decay, o, t){
+  var env = Math.max(0, 0.95 - (o * decay) / ((o * decay) + 1));
+  return wave * env;
+}
+
+this.main=function(t) { // drums
+  var kick_osc = (
+    saw(note(6,-1), t) * 0.24
+  + sin(note(6,-1), t)
+  );
+
+  var kick =
+    saw(2, t) * 0.098 // click
+  + fastlp_a( // vcf
+      perc(kick_osc, 78, t % (1/2), t)
+    ) * 3
+  ;
+  return kick;
+}
+  
+}
+
+clsTwo.prototype.run=function(t){
+  return this.main(t);
+}
+var soundTwo=new clsTwo();
+
+export function dsp(t) {
+  return soundTwo.run(t);
 }
