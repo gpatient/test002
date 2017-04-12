@@ -8,7 +8,7 @@
  */
 
  import dbg from 'debug';
- dbg('aa')("asdf="+Math.random());
+ dbg('aa')("asdf="+Math.random()+"time="+(new Date()).getMilliseconds());
 
 var clsOne=function(){
 function latch2(measher){
@@ -57,9 +57,8 @@ var clsTwo=function(){
 var fastlp_a =function(x){return m_aa.run(x)};
 function FastLP3(n){
   this.n=n;
+  
   this.val=0;
-  this.zval=0;
-  this.value=0;
 }
 FastLP3.prototype.run=function(x)
 {
@@ -89,18 +88,30 @@ function perc(wave, decay, o, t){
   return wave * env;
 }
 
+var kickbit = [ 0.99, 0.00, 0.99, 0.99, 0.00, 0.00];//, 0.99, 0.00 ,0.99,0.00,0.99,0.00 ];
+var millis=(new Date()).getMilliseconds();
+//for(var i=0;i<millis;i++)Math.random();
+for(var i=0;i<kickbit.length;i++){
+   kickbit[i]=Math.floor(Math.random()+0.5);
+   //kickbit[i]=Math.random();
+}
+//kickbit[0]=3;
+dbg('kickbit')(kickbit);
+var tempo=7;
 this.main=function(t) { // drums
+  var vol=kickbit[Math.floor(t * tempo) % kickbit.length];
+  //vol=0;
   var kick_osc = (
     saw(note(6,-1), t) * 0.24
   + sin(note(6,-1), t)
-  );
-
+  )*vol;
   var kick =
-    saw(2, t) * 0.098 // click
-  + fastlp_a( // vcf
-      perc(kick_osc, 78, t % (1/2), t)
+    //saw(tempo, t) * 0.098*vol+ // click
+  fastlp_a( // vcf
+      perc(kick_osc, 78, (t) % (1/tempo)*tempo, t)
     ) * 3
   ;
+  //if(t>0.0001)kick=kick*kickbit[Math.floor(t * tempo- 0.0001) % kickbit.length];
   return kick;
 }
   
