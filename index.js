@@ -120,13 +120,13 @@ var tempo=3.51368;
 var m_chk=0;
 var m_memTime=0;
 var m_wwT=10;
-tempo=Math.random()*5+0.9;
+
 this.main=function(t) { // drums
   
   if(Math.floor((t-m_memTime) * tempo) % (kickbit.length*m_wwT) ==0)
   //if(t-m_memTime>10)
   {if(m_chk==0){
-    tempo=Math.random()*5+0.9;
+    tempo=Math.random()*9+0.9;
     m_wwT=Math.floor(tempo*3);
     m_chk=1;m_memTime=t;dbg(' t')('dddd tempo='+tempo+' t='+t+' m_wwT='+m_wwT);bitset();}}
   else m_chk=0;
