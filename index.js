@@ -149,10 +149,12 @@ this.main=function(t) { // drums
   ;
   snare_osc*=vol;
   var snare = // vcf
-    fastlp_b(perc(snare_osc, 80 , (t + 1/tempo)*tempo % (1), t))
+    //fastlp_b(perc(snare_osc, 80 , (t + 1/tempo)*tempo % (1), t))
+    fastlp_b(perc(snare_osc, 80 , (t %( 1/tempo))*tempo , t))
   ;
-
-  var snd=snare+kick;
+  var melody;
+  melody=perc(sin(note(0,3),t),30,(t % (1/tempo*6))*(tempo/6) ,t)*0.1;
+  var snd=snare+kick+melody;
   //if(t>0.0001)kick=kick*kickbit[Math.floor(t * tempo- 0.0001) % kickbit.length];     
   return snd;
 }
