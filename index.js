@@ -50,11 +50,11 @@ clsOne.prototype.run=function(t){
   return this.main(t);
 }
 var soundOne=new clsOne();
-
+//////////////////////////////////////////////////////////////////////////////
 var clsTwo=function(){
-  var m_aa=new FastLP3(400);
+var m_aa=new FastLP3(400);var fastlp_a =function(x){return m_aa.run(x)};
+var m_bb=new FastLP3(35);var fastlp_b =function(x){return m_bb.run(x)};
 
-var fastlp_a =function(x){return m_aa.run(x)};
 function FastLP3(n){
   this.n=n;
   
@@ -68,6 +68,9 @@ FastLP3.prototype.run=function(x)
 //    this.zval=this.value;
 //  this.value=x;
 //  return (x+this.zval)/2;
+}
+function noise(){
+  return Math.random() * 2 - 1;
 }
 
 function sin(x, t){
@@ -88,17 +91,36 @@ function perc(wave, decay, o, t){
   return wave * env;
 }
 
-var kickbit = [ 0.99, 0.00, 0.99, 0.99, 0.00, 0.00];//, 0.99, 0.00 ,0.99,0.00,0.99,0.00 ];
 var millis=(new Date()).getMilliseconds();
-//for(var i=0;i<millis;i++)Math.random();
-for(var i=0;i<kickbit.length;i++){
-   kickbit[i]=Math.floor(Math.random()+0.5);
+for(var i=0;i<millis%100;i++)Math.random();
+
+var kickbit = [ 0.99, 0.00, 0.99, 0.99, 0.00, 0.00];//, 0.99, 0.00 ,0.99,0.00,0.99,0.00 ];
+var snarebit = [ 0.99, 0.00, 0.99, 0.99, 0.00, 0.00];//, 0.99, 0.00 ,0.99,0.00,0.99,0.00 ];
+
+function bitset(){
+var i;
+
+for( i=0;i<kickbit.length;i++){
+   kickbit[i]=Math.floor(Math.random()+0.3);
    //kickbit[i]=Math.random();
 }
+for( i=0;i<snarebit.length;i++){
+    snarebit[i]=Math.floor(Math.random()+0.5);
+   //kickbit[i]=Math.random();
+}
+//for(i=0;i<6;i++){snarebit.push(0);kickbit.push(0)}  
 //kickbit[0]=3;
-dbg('kickbit')(kickbit);
-var tempo=7;
+dbg('kickbit_')(kickbit);
+dbg('snarebit')(snarebit);
+}
+bitset();
+dbg('kickbit_')(kickbit);
+dbg('snarebit')(snarebit);
+var tempo=2.51368;
 this.main=function(t) { // drums
+  var chk=1;
+  if(chk==0 && Math.floor(t * tempo) % (kickbit.length*6)==0)bitset();
+  else chk=0;
   var vol=kickbit[Math.floor(t * tempo) % kickbit.length];
   //vol=0;
   var kick_osc = (
@@ -111,8 +133,19 @@ this.main=function(t) { // drums
       perc(kick_osc, 78, (t) % (1/tempo)*tempo, t)
     ) * 3
   ;
-  //if(t>0.0001)kick=kick*kickbit[Math.floor(t * tempo- 0.0001) % kickbit.length];
-  return kick;
+  vol=snarebit[Math.floor(t * tempo) % snarebit.length];
+  var snare_osc =
+    sin(note(9, 0), t) * 0.1
+  + noise() * 0.7
+  ;
+  snare_osc*=vol;
+  var snare = // vcf
+    fastlp_b(perc(snare_osc, 80 , (t + 1/tempo)*tempo % (1), t))
+  ;
+
+  var snd=snare+kick;
+  //if(t>0.0001)kick=kick*kickbit[Math.floor(t * tempo- 0.0001) % kickbit.length];     
+  return snd;
 }
   
 }
