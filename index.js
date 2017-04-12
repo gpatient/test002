@@ -117,10 +117,11 @@ bitset();
 dbg('kickbit_')(kickbit);
 dbg('snarebit')(snarebit);
 var tempo=2.51368;
+var m_chk=0;
 this.main=function(t) { // drums
-  var chk=1;
-  if(chk==0 && Math.floor(t * tempo) % (kickbit.length*6)==0)bitset();
-  else chk=0;
+  
+  if(Math.floor(t * tempo) % (kickbit.length*2) ==0){if(m_chk==0){m_chk=1;dbg(' ')('dddd');bitset();}}
+  else m_chk=0;
   var vol=kickbit[Math.floor(t * tempo) % kickbit.length];
   //vol=0;
   var kick_osc = (
