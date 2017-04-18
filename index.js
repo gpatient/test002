@@ -119,11 +119,11 @@ dbg('snarebit')(snarebit);
 var tempo=3.51368;
 var m_chk=0;
 var m_memTime=0;
-var m_wwT=10;
+var m_wwT=30;
 
-var m_melody=[0,3,5,7,10,12,15,12,24,24,24,24,
-              0,3,5,7,10,12,15,12,24,24,24,24,
-              0,3,5,7,10,12,15,12,24,24,24,24];
+var m_melody=[0,3,5,7,10,12,15,12,24,24,24,24];//,
+              //0,3,5,7,10,12,15,12,24,24,24,24,
+              //0,3,5,7,10,12,15,12,24,24,24,24];
 // 0 2 4 7  9  12
 // 2 4 7 9  12 14
 // 4 7 9 12 14 16
@@ -169,6 +169,7 @@ function generativeMelody()
 }
 this.main=function(t) { // drums
   
+  //TIME CHECK m_wwT is one music length
   if(Math.floor((t-m_memTime) * tempo) % (kickbit.length*m_wwT) ==0)
   //if(t-m_memTime>10)
   {if(m_chk==0){
