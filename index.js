@@ -174,7 +174,7 @@ this.main=function(t) { // drums
   {if(m_chk==0){
     tempo=Math.random()*9+0.9;
     m_wwT=Math.floor(tempo*3);
-    tempo=7.83;
+    //tempo=7.83;
     generativeMelody();
     m_chk=1;m_memTime=t;dbg(' t')('dddd tempo='+tempo+' t='+t+' m_wwT='+m_wwT);bitset();}}
   else m_chk=0;
@@ -204,7 +204,7 @@ this.main=function(t) { // drums
   var not=m_melody[Math.floor(t * tempo) % m_melody.length];
   var notfreq=note(not,3);
   if(not!=24)
-  melody=perc(sin(notfreq,t),20,(t % (1/tempo*1))*(tempo) ,t)*0.1;
+  melody=perc(sin(notfreq,t),10,(t % (1/tempo*1))*(tempo) ,t)*0.1;
   var snd=snare+kick+melody;
   //snd+=sin(783,t)*0.1;
   //snd+=sin(783*9/8,t)*0.1;
