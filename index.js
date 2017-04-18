@@ -140,13 +140,13 @@ function generativeMelody()
 ];
   var len=m_melody.length-Math.floor(Math.random()*5)-1;
   var list=   [3  ,5  ,7  ,10  ,0,  0  , 0];
-  var listran=[0.2,0.3,0.1,0.25,0.3,0.3,1.3];
+  var listran=[0.5,0.3,0.1,0.25,0.3,0.9,1.3];
   var sum,cho,i,j,sum2,trans=0;
   list=lls[Math.floor(Math.random()*5)];
-  list.push(24);
+  
   trans=Math.floor(Math.random()*12);
    for( i=0;i<list.length;i++){list[i]+=trans;};
-  
+  list.push(24);
    for( i=0;i<m_melody.length;i++){m_melody[i]=24;};
    
   sum=0;
