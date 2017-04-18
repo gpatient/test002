@@ -121,6 +121,53 @@ var m_chk=0;
 var m_memTime=0;
 var m_wwT=10;
 
+var m_melody=[0,3,5,7,10,12,15,12,24,24,24,24,
+              0,3,5,7,10,12,15,12,24,24,24,24,
+              0,3,5,7,10,12,15,12,24,24,24,24];
+// 0 2 4 7  9  12
+// 2 4 7 9  12 14
+// 4 7 9 12 14 16
+// 7 9 12 14 16 19
+//-3 0 2 4  7  9
+
+function generativeMelody()
+{
+  var lls=[[0, 2, 4, 7 , 9,  12],
+ [2, 4, 7, 9,  12, 14],
+ [4, 7, 9, 12, 14, 16],
+ [7, 9, 12, 14, 16, 19],
+ [-3, 0, 2, 4,  7,  9]
+];
+  var len=m_melody.length-Math.floor(Math.random()*5)-1;
+  var list=   [3  ,5  ,7  ,10  ,0,  0  , 0];
+  var listran=[0.2,0.3,0.1,0.25,0.3,0.3,1.3];
+  var sum,cho,i,j,sum2,trans=0;
+  list=lls[Math.floor(Math.random()*5)];
+  list.push(24);
+  trans=Math.floor(Math.random()*12);
+   for( i=0;i<list.length;i++){list[i]+=trans;};
+  
+   for( i=0;i<m_melody.length;i++){m_melody[i]=24;};
+   
+  sum=0;
+  for( i=0;i<listran.length;i++){sum+=listran[i];};
+  
+  dbg('list')("list="+list+" sum="+sum);
+  for( i=1;i<len;i++){
+    cho=Math.random()*sum;
+    sum2=0;
+    for(j=0;j<listran.length;j++){sum2+=listran[j];if(sum2>cho)break;}
+    dbg('j')("i="+i+" j="+j+" m="+list[j]);
+    //if(list[j])
+    m_melody[i]=list[j];
+    //m_melody[i]=Math.floor(Math.random()+0.3);
+   //kickbit[i]=Math.random();
+  }
+  m_melody[0]=list[0];
+  m_melody[i]=list[5];
+  
+  dbg('m_melody')("m_melody="+m_melody);
+}
 this.main=function(t) { // drums
   
   if(Math.floor((t-m_memTime) * tempo) % (kickbit.length*m_wwT) ==0)
@@ -128,6 +175,8 @@ this.main=function(t) { // drums
   {if(m_chk==0){
     tempo=Math.random()*9+0.9;
     m_wwT=Math.floor(tempo*3);
+    tempo=7.83;
+    generativeMelody();
     m_chk=1;m_memTime=t;dbg(' t')('dddd tempo='+tempo+' t='+t+' m_wwT='+m_wwT);bitset();}}
   else m_chk=0;
   var vol=kickbit[Math.floor(t * tempo) % kickbit.length];
@@ -152,9 +201,16 @@ this.main=function(t) { // drums
     //fastlp_b(perc(snare_osc, 80 , (t + 1/tempo)*tempo % (1), t))
     fastlp_b(perc(snare_osc, 80 , (t %( 1/tempo))*tempo , t))
   ;
-  var melody;
-  melody=perc(sin(note(0,3),t),30,(t % (1/tempo*6))*(tempo/6) ,t)*0.1;
+  var melody=0;
+  var not=m_melody[Math.floor(t * tempo) % m_melody.length];
+  var notfreq=note(not,3);
+  if(not!=24)
+  melody=perc(sin(notfreq,t),20,(t % (1/tempo*1))*(tempo) ,t)*0.1;
   var snd=snare+kick+melody;
+  //snd+=sin(783,t)*0.1;
+  //snd+=sin(783*9/8,t)*0.1;
+  //snd+=sin(783/2*9/8,t)*0.1;
+  //snd+=sin(441,t)*0.1;
   //if(t>0.0001)kick=kick*kickbit[Math.floor(t * tempo- 0.0001) % kickbit.length];     
   return snd;
 }
