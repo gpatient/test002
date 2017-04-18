@@ -157,11 +157,10 @@ function generativeMelody()
     cho=Math.random()*sum;
     sum2=0;
     for(j=0;j<listran.length;j++){sum2+=listran[j];if(sum2>cho)break;}
-    dbg('j')("i="+i+" j="+j+" m="+list[j]);
-    //if(list[j])
+    //dbg('j')("i="+i+" j="+j+" m="+list[j]);
+   
     m_melody[i]=list[j];
-    //m_melody[i]=Math.floor(Math.random()+0.3);
-   //kickbit[i]=Math.random();
+   
   }
   m_melody[0]=list[0];
   m_melody[i]=list[5];
