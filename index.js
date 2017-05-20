@@ -233,6 +233,9 @@ this.main=function(t) { // drums
   if(Math.floor((t-m_memTime) * tempo) % (m_melody.length*m_wwT) ==0)
   //if(t-m_memTime>10)
   {if(m_chk==0){
+    m_aaS1=tempo=Math.floor(Math.random()*4)+1;
+    m_aaS2=tempo=Math.floor(Math.random()*8)+1;
+    m_aaS3=tempo=Math.floor(Math.random()*2)+0;
     tempo=Math.random()*9+0.9;
     m_wwT=Math.floor(tempo*2.2); // one music length
     //tempo=7.83;
