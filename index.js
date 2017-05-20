@@ -169,6 +169,60 @@ function generativeMelody()
   
   dbg('m_melody')("m_melody="+m_melody);
 }
+//////////////////////////////////////////////////////////
+
+var vcf =[];
+var i=0;
+for(i=0;i<5;i++){
+  vcf[i]=new QBiquad('bpf');
+  vcf[i].cut(700) .res(15).gain(3).update();  
+}
+
+function filterBank(snd,fn,mm)
+{
+
+
+  
+  var out=0;
+  var oo=[];
+  // vowel a
+  var ff=[650, 1080, 2650, 2900, 3250];
+  var am=[ 1, 0.50118723362727, 0.44668359215096, 0.3981071705535, 0.079432823472428 ];
+  var bw=[ 10, 12.777777777778, 24.166666666667, 30, 35.357142857143 ];
+  if(fn==1){//vowel i
+    ff=[290, 1870, 2800, 3250, 3540];
+    am=[ 1, 0.17782794100389, 0.12589254117942, 0.1, 0.031622776601684 ];
+    bw=[ 7.25, 20.777777777778, 28, 27.083333333333, 29.5 ];
+  }
+  else if(fn==2){// vowel e
+    ff=[400, 1700, 2600, 3200, 3580];
+    am=[ 1, 0.19952623149689, 0.25118864315096, 0.19952623149689, 0.1 ];
+    bw=[ 5.7142857142857, 21.25, 26, 26.666666666667, 29.833333333333 ];
+  
+  }
+  //q= cut/bw  res
+  for(i=0;i<5;i++){
+    vcf[i].cut(ff[i]+mm).res(bw[i]*(mm/100+1)).update();
+    oo[i] = vcf[i].update().run(snd)*am[i];
+    out+=oo[i];
+    
+  }
+  return out*3;
+  
+}
+function aaSnd(freq,t){
+  var snd;
+  var cc=Math.sin(t*Math.PI*2*(freq/2))*(6);
+  snd=Math.sin(t*Math.PI*2*freq+cc  );
+  snd*=2.25;
+  snd=filterBank(snd,1,0);
+  return snd;
+}
+
+function baseSnd(notfreq,t){
+  return aaSnd(notfreq,t);
+  //return sin(notfreq,t);
+  }
 this.main=function(t) { // drums
   
   //TIME CHECK m_wwT is one music length
@@ -207,9 +261,9 @@ this.main=function(t) { // drums
   var not=m_melody[Math.floor(t * tempo) % m_melody.length];
   var notfreq=note(not,3);
   if(not!=24)
-  melody=perc(sin(notfreq,t),10,(t % (1/tempo*1))*(tempo) ,t)*0.1;
+  melody=perc(baseSnd(notfreq,t),10,(t % (1/tempo*1))*(tempo) ,t)*0.1;
   var snd=snare+kick+melody;
-  //snd+=sin(783,t)*0.1;
+  //snd+=sin(783,t)*0.1; 
   //snd+=sin(783*9/8,t)*0.1;
   //snd+=sin(783/2*9/8,t)*0.1;
   //snd+=sin(441,t)*0.1;
@@ -267,13 +321,8 @@ function perc(wave, decay, o, t){
 var millis=(new Date()).getMilliseconds();
 for(var i=0;i<millis%100;i++)Math.random();
 
-           
-var vcf =[];
-var i=0;
-for(i=0;i<5;i++){
-  vcf[i]=new QBiquad('bpf');
-  vcf[i].cut(700) .res(15).gain(3).update();  
-}
+ 
+ 
 /*
 bass:
 ia	ftgentmp 0, 0, 16, -2, 600, 1040, 2250, 2450, 2750, 0,  -7,  -9,  -9, -20, 60, 70, 110, 120, 130
@@ -310,8 +359,18 @@ ii	ftgentmp 0, 0, 16, -2, 270, 2140, 2950, 3900, 4950, 0, -12, -26, -26, -44, 60
 io	ftgentmp 0, 0, 16, -2, 450,  800, 2830, 3800, 4950, 0, -11, -22, -22, -50, 40,  80, 100, 120, 120	
 iu	ftgentmp 0, 0, 16, -2, 325,  700, 2700, 3800, 4950, 0, -16, -35, -40, -60, 50,  60, 170, 180, 200
 */
+
+var vcf =[];
+var i=0;
+for(i=0;i<5;i++){
+  vcf[i]=new QBiquad('bpf');
+  vcf[i].cut(700) .res(15).gain(3).update();  
+}
+
 function filterBank(snd,fn,mm)
 {
+
+
   
   var out=0;
   var oo=[];
@@ -340,7 +399,14 @@ function filterBank(snd,fn,mm)
   return out*3;
   
 }
-
+function aaSnd(freq,t){
+  var snd;
+  var cc=Math.sin(t*Math.PI*2*(freq/2))*(6);
+  snd=Math.sin(t*Math.PI*2*freq+cc  );
+  snd*=0.25;
+  snd=filterBank(snd,Math.floor(t%3),0);
+  return snd;
+}
 this.main=function(t) { // drums
   var sndr=Math.random()*33.4;
   var m_aa=new FastLP3(410);var fastlp_a =function(x){return m_aa.run(x)};
@@ -350,9 +416,11 @@ this.main=function(t) { // drums
   var freq=note(30);
   var cc=Math.sin(t*Math.PI*2*(freq/2))*(6);
   snd=Math.sin(t*Math.PI*2*freq+cc  )+snda;
-  snd*=Math.cos(t*Math.PI*2*0.25);
+  
   snd*=0.25;
   snd=filterBank(snd,Math.floor(t%3),0);
+  snd=aaSnd(freq,t);
+  snd*=Math.cos(t*Math.PI*2*0.25);
   return snd;
   return sndr*0.01;
 }
@@ -367,6 +435,6 @@ var soundThree=new clsThree();
 
 
 export function dsp(t) {
-  //return soundTwo.run(t);
-  return soundThree.run(t);
+  return soundTwo.run(t);
+  //return soundThree.run(t);
 }
