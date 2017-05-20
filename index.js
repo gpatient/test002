@@ -222,6 +222,67 @@ clsTwo.prototype.run=function(t){
 }
 var soundTwo=new clsTwo();
 
+var clsThree=function(){
+var m_aa=new FastLP3(400);var fastlp_a =function(x){return m_aa.run(x)};
+var m_bb=new FastLP3(35);var fastlp_b =function(x){return m_bb.run(x)};
+
+function FastLP3(n){
+  this.n=n;
+  
+  this.val=0;
+}
+FastLP3.prototype.run=function(x)
+{
+
+  this.val += (x - this.val) / this.n;
+  return this.val;
+//    this.zval=this.value;
+//  this.value=x;
+//  return (x+this.zval)/2;
+}
+function noise(){
+  return Math.random() * 2 - 1;
+}
+
+function sin(x, t){
+  return Math.sin(2 * Math.PI * t * x);
+}
+
+function saw(x, t){
+  return 1-2 * (t % (1/x)) * x;
+}
+function note(n, octave){
+  return Math.pow(
+    2,
+    (n + 0 - 33 + (12 * (octave || 0))) / 12
+  ) * 440; // A4 tune
+}
+function perc(wave, decay, o, t){
+  var env = Math.max(0, 0.95 - (o * decay) / ((o * decay) + 1));
+  return wave * env;
+}
+
+var millis=(new Date()).getMilliseconds();
+for(var i=0;i<millis%100;i++)Math.random();
+
+this.main=function(t) { // drums
+  var sndr=Math.random()*33.4;
+  var m_aa=new FastLP3(410);var fastlp_a =function(x){return m_aa.run(x)};
+  var snd=fastlp_a(sndr);
+  return snd;
+  return sndr*0.01;
+}
+  
+}
+
+clsThree.prototype.run=function(t){
+  return this.main(t);
+}
+var soundThree=new clsThree();
+
+
+
 export function dsp(t) {
   return soundTwo.run(t);
+  return soundThree.run(t);
 }
