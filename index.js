@@ -350,9 +350,9 @@ this.main=function(t) { // drums
   var freq=note(30);
   var cc=Math.sin(t*Math.PI*2*(freq/2))*(6);
   snd=Math.sin(t*Math.PI*2*freq+cc  )+snda;
-  snd*=Math.sin(t*Math.PI*2*7.83/10/4);
+  snd*=Math.cos(t*Math.PI*2*0.25);
   snd*=0.25;
-  snd=filterBank(snd,1,0);
+  snd=filterBank(snd,Math.floor(t%3),0);
   return snd;
   return sndr*0.01;
 }
