@@ -269,6 +269,10 @@ this.main=function(t) { // drums
   var sndr=Math.random()*33.4;
   var m_aa=new FastLP3(410);var fastlp_a =function(x){return m_aa.run(x)};
   var snd=fastlp_a(sndr);
+  snd=Math.sin(t*Math.PI*2*441);
+  var cc=Math.sin(t*Math.PI*2*(441/2))*(6);
+  snd=Math.sin(t*Math.PI*2*441+cc  )*Math.sin(t*Math.PI*2*7.83/10/4);
+  snd*=0.05;
   return snd;
   return sndr*0.01;
 }
@@ -283,6 +287,6 @@ var soundThree=new clsThree();
 
 
 export function dsp(t) {
-  return soundTwo.run(t);
+  //return soundTwo.run(t);
   return soundThree.run(t);
 }
