@@ -210,12 +210,16 @@ function filterBank(snd,fn,mm)
   return out*3;
   
 }
+var m_aaS1=2,m_aaS2=6,m_aaS3=0; //1~4 1~8 0~2
+m_aaS1=tempo=Math.floor(Math.random()*4)+1;
+m_aaS2=tempo=Math.floor(Math.random()*8)+1;
+m_aaS3=tempo=Math.floor(Math.random()*2)+0;
 function aaSnd(freq,t){
   var snd;
-  var cc=Math.sin(t*Math.PI*2*(freq/2))*(6);
+  var cc=Math.sin(t*Math.PI*2*(freq/m_aaS1))*(m_aaS2);
   snd=Math.sin(t*Math.PI*2*freq+cc  );
   snd*=2.25;
-  snd=filterBank(snd,1,0);
+  snd=filterBank(snd,m_aaS3,0);
   return snd;
 }
 
