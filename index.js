@@ -215,7 +215,7 @@ m_aaS1=Math.floor(Math.random()*4)+1;
 m_aaS2=Math.floor(Math.random()*8)+1;
 m_aaS3=Math.floor(Math.random()*2)+0;
 function aaSnd(freq,t){
-  var snd,snd2,freq2,vv,vv2=9,vv3=2,vv4=9;
+  var snd,snd2,freq2,vv,vv2=9,vv3=2,vv4=9,vv5=3;
   var cc=Math.sin(t*Math.PI*2*(freq/m_aaS1))*(m_aaS2);
   vv4=Math.random()*19+5;
   snd=Math.sin(t*Math.PI*2*freq+cc  );
@@ -229,8 +229,9 @@ function aaSnd(freq,t){
     if(Math.random()>0.499)vv2=vv4*i;
     else vv2=vv4/i;
     vv=Math.random()*0.13+0.02;
-    vv3=Math.floor(Math.random()*3)+1;
-    cc=Math.sin(t*Math.PI*2*(freq2/m_aaS1))*(vv3);
+    vv3=Math.floor(Math.random()*2)+1;
+    vv5=Math.floor(Math.random()*3)+1;
+    cc=Math.sin(t*Math.PI*2*(freq2/vv5))*(vv3);
     snd2=Math.sin(t*Math.PI*2*freq2+cc  );
     snd2*=(Math.cos(t*Math.PI*2*vv2)*vv+0.15);
     snd+=snd2;  
