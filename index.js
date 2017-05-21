@@ -226,15 +226,16 @@ function aaSnd(freq,t){
     if(Math.random()>0.499)freq2=freq/i;
     else freq2=freq*i;
     //vv2=Math.random()*19+5;
-    vv2=vv4/i;
-    vv=Math.random()*0.15+0.02;
+    if(Math.random()>0.499)vv2=vv4*i;
+    else vv2=vv4/i;
+    vv=Math.random()*0.13+0.02;
     vv3=Math.floor(Math.random()*3)+1;
     cc=Math.sin(t*Math.PI*2*(freq2/m_aaS1))*(vv3);
     snd2=Math.sin(t*Math.PI*2*freq2+cc  );
     snd2*=(Math.cos(t*Math.PI*2*vv2)*vv+0.15);
     snd+=snd2;  
   }
-  snd*=1.6545325;
+  snd*=0.81666545325;
   
   snd=filterBank(snd,m_aaS3,0);
   //snd2=filterBank(snd2,0,0);
@@ -287,7 +288,7 @@ this.main=function(t) { // drums
   var not=m_melody[Math.floor(t * tempo) % m_melody.length];
   var notfreq=note(not,3);
   if(not!=24)
-  melody=perc(baseSnd(notfreq,t),10,(t % (1/tempo*1))*(tempo) ,t)*0.1;
+  melody=perc(baseSnd(notfreq,t),1,(t % (1/tempo*1))*(tempo) ,t)*0.1;
   var snd=snare+kick+melody;
   //snd+=sin(783,t)*0.1; 
   //snd+=sin(783*9/8,t)*0.1;
